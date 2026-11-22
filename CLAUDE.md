@@ -51,3 +51,6 @@ Known issues solved:
 - `EALLOWSCRIPTS` on install: caused by `allow-scripts` in user `.npmrc`; fixed with `npm config delete allow-scripts --location=user`.
 - `ERESOLVE` installing vitest: `@types/node@20` conflicted with vitest's peer range; fixed by installing `@types/node` matching Node 22/24.
 - CI `Cannot find name 'LayoutProps'`: Next.js generates route types in `.next/`, which doesn't exist on a fresh checkout; fixed with `"typecheck": "next typegen && tsc --noEmit"`.
+- `next build` fails with "uncached or runtime data during prerendering": the project has `cacheComponents: true`, so anything that reads the request (`cookies()`, `searchParams`, Supabase session) must be inside `<Suspense>`. Only `next build` catches this, not lint/typecheck/test.
+- Next.js 16: `middleware.ts` is now `proxy.ts`.
+- Auth emails: Supabase only allows editing templates with custom SMTP (Gmail account + app password). Templates live in `supabase/templates/` and use `{{ .RedirectTo }}?token_hash=...` so links work on any device.
