@@ -39,7 +39,7 @@ Pending:
 - [x] Add starter files: `.github/workflows/ci.yml`, `vitest.config.mts`, `.env.example`, `tests/smoke.test.ts`, `README.md`
 - [x] `npm run lint`, `npm run typecheck`, `npm run test` all pass
 - [x] First commit + push; GitHub Actions CI green
-- [ ] Create `.env.local` with Supabase URL and keys
+- [x] Create `.env.local` with Supabase URL and keys
 - [ ] Install Supabase CLI (`npm i -D supabase`), `npx supabase init`, `login`, `link --project-ref <ref>`
 - [ ] Import repo in Vercel, add env vars, deploy
 - [ ] GitHub Projects board with Sprint 1 tasks
