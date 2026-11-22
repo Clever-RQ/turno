@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FORMATO_SLUG, esSlugReservado } from "./slug";
+import { parsearPrecio } from "./servicios";
 import { normalizarTelefono } from "./telefono";
 
 // -------------------------------------------------------------
@@ -96,4 +97,40 @@ export const onboardingSchema = z.object({
       }
       return normalizado;
     }),
+});
+
+// -------------------------------------------------------------
+// Servicios (#5)
+// -------------------------------------------------------------
+
+export const servicioSchema = z.object({
+  // Vacío al crear; con valor al editar.
+  id: z.uuid().optional().or(z.literal("").transform(() => undefined)),
+  nombre: z
+    .string()
+    .trim()
+    .min(2, { error: "Escribe el nombre del servicio." })
+    .max(60, { error: "Usa como máximo 60 caracteres." }),
+  duracion_min: z.coerce
+    .number({ error: "Elige una duración." })
+    .int()
+    .min(5, { error: "La duración mínima es 5 minutos." })
+    .max(480, { error: "La duración máxima es 8 horas." })
+    .multipleOf(5, { error: "Usa múltiplos de 5 minutos." }),
+  precio: z
+    .string()
+    .optional()
+    .transform((valor, ctx) => {
+      const precio = parsearPrecio(valor ?? "");
+      if (Number.isNaN(precio)) {
+        ctx.addIssue({ code: "custom", message: "Escribe un precio válido, por ejemplo 25 o 25.50." });
+        return z.NEVER;
+      }
+      return precio;
+    }),
+  // Un checkbox marcado llega como "on"; sin marcar, no llega.
+  activo: z
+    .literal("on")
+    .optional()
+    .transform((valor) => valor === "on"),
 });

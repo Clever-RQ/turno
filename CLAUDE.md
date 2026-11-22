@@ -32,7 +32,7 @@ Tasks are GitHub issues on the "Turno – MVP" project board:
 - [x] #1 SQL migration with the tables
 - [x] #2 RLS policies per table
 - [x] #3 Login with email and Google (Supabase Auth)
-- [ ] #4 Onboarding: business name and slug
+- [x] #4 Onboarding: business name and slug
 - [ ] #5 CRUD for services
 - [ ] #6 CRUD for staff
 - [ ] #7 CRUD for schedules and days off
