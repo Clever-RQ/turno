@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { AvisoError, TarjetaAuth, claseEnlace } from "@/components/auth/avisos";
 import { crearClienteServidor } from "@/lib/supabase/server";
@@ -21,6 +22,8 @@ export default function PaginaNuevaContrasena() {
  * Sin esa sesión, el enlace venció o se abrió directo.
  */
 async function Contenido() {
+  // Igual que en el panel: la sesión se valida solo en la visita real.
+  await connection();
   const supabase = await crearClienteServidor();
   const { data } = await supabase.auth.getClaims();
   const email = data?.claims?.email;

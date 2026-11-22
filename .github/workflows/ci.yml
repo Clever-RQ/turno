@@ -21,3 +21,6 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test
+      # Compila igual que Vercel: detecta errores que lint/typecheck/test no ven
+      # (por ejemplo, datos de la petición fuera de <Suspense> con cacheComponents).
+      - run: npm run build

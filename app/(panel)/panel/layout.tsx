@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { Logo } from "@/components/logo";
 import { crearClienteServidor } from "@/lib/supabase/server";
@@ -54,6 +55,9 @@ export default function LayoutPanel({ children }: LayoutProps<"/panel">) {
 }
 
 async function TarjetaUsuario() {
+  // getClaims() compara la hora actual con el vencimiento del token.
+  // connection() hace que esto se calcule solo en la visita real, no en un prefetch.
+  await connection();
   const supabase = await crearClienteServidor();
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
