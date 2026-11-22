@@ -73,3 +73,20 @@ describe("servicioSchema", () => {
     expect(servicioSchema.safeParse({ ...base, id: "123" }).success).toBe(false);
   });
 });
+
+describe("personaSchema", () => {
+  it("acepta un nombre y el checkbox activo", async () => {
+    const { personaSchema } = await import("../lib/esquemas");
+    expect(personaSchema.parse({ id: "", nombre: "  Carlos  ", activo: "on" })).toEqual({
+      id: undefined,
+      nombre: "Carlos",
+      activo: true,
+    });
+  });
+
+  it("rechaza nombres muy cortos", async () => {
+    const { personaSchema } = await import("../lib/esquemas");
+    const r = personaSchema.safeParse({ nombre: "C" });
+    expect(r.error?.issues[0].message).toBe("Escribe el nombre de la persona.");
+  });
+});
