@@ -40,7 +40,7 @@ Pending:
 - [x] `npm run lint`, `npm run typecheck`, `npm run test` all pass
 - [x] First commit + push; GitHub Actions CI green
 - [x] Create `.env.local` with Supabase URL and keys
-- [ ] Install Supabase CLI (`npm i -D supabase`), `npx supabase init`, `login`, `link --project-ref <ref>`
+- [x] Install Supabase CLI (`npm i -D supabase`), `npx supabase init`, `login`, `link --project-ref <ref>`
 - [ ] Import repo in Vercel, add env vars, deploy
 - [ ] GitHub Projects board with Sprint 1 tasks
 - [ ] Final check: small change → push → CI green → visible on Vercel URL
