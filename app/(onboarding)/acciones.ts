@@ -71,12 +71,16 @@ export async function crearNegocio(
   if (!data?.claims) redirect("/login");
 
   // owner_id sale de la sesión, nunca del formulario. RLS además exige owner_id = auth.uid().
-  const { error } = await supabase.from("negocios").insert({
-    owner_id: data.claims.sub,
-    nombre: datos.data.nombre,
-    slug: datos.data.slug,
-    telefono: datos.data.telefono,
-  });
+  const { data: negocio, error } = await supabase
+    .from("negocios")
+    .insert({
+      owner_id: data.claims.sub,
+      nombre: datos.data.nombre,
+      slug: datos.data.slug,
+      telefono: datos.data.telefono,
+    })
+    .select("id")
+    .single();
 
   if (error) {
     // 23505 = unique: otro negocio tomó el link justo antes, o este dueño ya tiene negocio.
@@ -90,6 +94,14 @@ export async function crearNegocio(
     }
     return { mensaje: MENSAJE_GENERICO, slugEnviado };
   }
+
+  // El dueño es la primera persona del equipo (muchos negocios son de una sola persona).
+  // Si fallara, no bloqueamos: el panel avisa que no hay personal y lo puede agregar.
+  const metadatos = (data.claims.user_metadata ?? {}) as { nombre?: string; full_name?: string };
+  await supabase.from("personal").insert({
+    negocio_id: negocio.id,
+    nombre: metadatos.nombre?.trim() || metadatos.full_name?.trim() || "Yo",
+  });
 
   // Paso 2: agregar servicios.
   redirect("/onboarding/servicios");

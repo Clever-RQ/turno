@@ -134,3 +134,20 @@ export const servicioSchema = z.object({
     .optional()
     .transform((valor) => valor === "on"),
 });
+
+// -------------------------------------------------------------
+// Equipo / personal (#6)
+// -------------------------------------------------------------
+
+export const personaSchema = z.object({
+  id: z.uuid().optional().or(z.literal("").transform(() => undefined)),
+  nombre: z
+    .string()
+    .trim()
+    .min(2, { error: "Escribe el nombre de la persona." })
+    .max(60, { error: "Usa como máximo 60 caracteres." }),
+  activo: z
+    .literal("on")
+    .optional()
+    .transform((valor) => valor === "on"),
+});

@@ -10,6 +10,7 @@ import { Logo } from "@/components/logo";
 const SECCIONES: { nombre: string; href?: string }[] = [
   { nombre: "Agenda", href: "/panel" },
   { nombre: "Servicios", href: "/panel/servicios" },
+  { nombre: "Equipo", href: "/panel/equipo" },
   { nombre: "Horarios" },
   { nombre: "Clientes" },
   { nombre: "Asistente IA" },

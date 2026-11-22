@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useOptimistic, useRef, useState, useTransition } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import { AvisoError } from "@/components/auth/avisos";
-import { IconoCerrar, IconoLapiz } from "@/components/iconos";
+import { IconoLapiz } from "@/components/iconos";
+import { AvatarAtento } from "@/components/panel/avatar-atento";
+import { AccionesDialogo, DialogoLateral } from "@/components/panel/dialogo-lateral";
 import { FormularioServicio, Interruptor } from "@/components/servicios/formulario-servicio";
 import { cambiarActivoServicio, eliminarServicio } from "@/lib/acciones/servicios";
 import { formatearPrecio, resumenServicio, type Servicio } from "@/lib/servicios";
@@ -160,10 +162,6 @@ function EstadoVacio({ alAgregar }: { alAgregar: () => void }) {
   );
 }
 
-/**
- * Panel lateral (computadora) u hoja inferior (celular).
- * Usa <dialog> nativo: atrapa el foco, se cierra con Esc y oscurece el fondo.
- */
 function DialogoServicio({
   edicion,
   alCerrar,
@@ -173,76 +171,23 @@ function DialogoServicio({
   alCerrar: () => void;
   alEliminar: (s: Servicio) => void;
 }) {
-  const dialogo = useRef<HTMLDialogElement>(null);
   const servicio = edicion && edicion !== "nuevo" ? edicion : undefined;
 
-  useEffect(() => {
-    if (edicion) dialogo.current?.showModal();
-    else dialogo.current?.close();
-  }, [edicion]);
-
   return (
-    <dialog
-      ref={dialogo}
-      onClose={alCerrar}
-      aria-labelledby="titulo-dialogo-servicio"
-      className="m-0 mt-auto max-h-[92dvh] w-full max-w-none rounded-t-3xl border border-white/10 bg-tinta p-6 text-white backdrop:bg-black/60 md:ml-auto md:mr-4 md:my-4 md:h-[calc(100dvh-2rem)] md:max-h-none md:w-[28rem] md:rounded-3xl md:p-8"
-    >
-      {edicion && (
-        <div className="flex h-full flex-col">
-          <div aria-hidden="true" className="mx-auto mb-5 h-1.5 w-12 rounded-full bg-white/20 md:hidden" />
-          <div className="mb-6 flex items-center justify-between gap-4">
-            <h2 id="titulo-dialogo-servicio" className="font-titulo text-2xl font-bold sm:text-3xl">
-              {servicio ? "Editar servicio" : "Nuevo servicio"}
-            </h2>
-            <button
-              type="button"
-              onClick={alCerrar}
-              aria-label="Cerrar"
-              className="hidden size-11 place-items-center rounded-xl hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-esmeralda md:grid"
-            >
-              <IconoCerrar className="size-6" />
-            </button>
-          </div>
-
-          <FormularioServicio
-            key={servicio?.id ?? "nuevo"}
-            servicio={servicio}
-            variante="dialogo"
-            textoBoton={servicio ? "Guardar cambios" : "Guardar servicio"}
-            alGuardar={alCerrar}
-          >
-            <div className={`flex items-center pt-1 ${servicio ? "justify-between" : "justify-center"}`}>
-              {servicio && (
-                <button
-                  type="button"
-                  onClick={() => alEliminar(servicio)}
-                  className="py-2 font-medium text-red-300 hover:text-red-200 focus-visible:outline-2 focus-visible:outline-esmeralda"
-                >
-                  Eliminar servicio
-                </button>
-              )}
-              <button type="button" onClick={alCerrar} className="py-2 text-white/80 hover:text-white">
-                Cancelar
-              </button>
-            </div>
-          </FormularioServicio>
-        </div>
-      )}
-    </dialog>
-  );
-}
-
-// El asistente en estado "Atento" (la "o" del logo con ojos).
-function AvatarAtento() {
-  return (
-    <svg viewBox="0 0 64 64" className="size-24" aria-hidden="true">
-      <circle cx="32" cy="32" r="31" fill="#0B1F1A" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-      <circle cx="32" cy="32" r="24" fill="#FFFFFF" />
-      <circle cx="32" cy="32" r="17" fill="#0B1F1A" />
-      <path d="M32 32 L32 17 A15 15 0 0 1 45 24.5 Z" fill="#10B981" />
-      <circle cx="26" cy="38" r="2.6" fill="#FFFFFF" />
-      <circle cx="38" cy="38" r="2.6" fill="#FFFFFF" />
-    </svg>
+    <DialogoLateral abierto={Boolean(edicion)} titulo={servicio ? "Editar servicio" : "Nuevo servicio"} alCerrar={alCerrar}>
+      <FormularioServicio
+        key={servicio?.id ?? "nuevo"}
+        servicio={servicio}
+        variante="dialogo"
+        textoBoton={servicio ? "Guardar cambios" : "Guardar servicio"}
+        alGuardar={alCerrar}
+      >
+        <AccionesDialogo
+          textoEliminar="Eliminar servicio"
+          alEliminar={servicio ? () => alEliminar(servicio) : undefined}
+          alCancelar={alCerrar}
+        />
+      </FormularioServicio>
+    </DialogoLateral>
   );
 }

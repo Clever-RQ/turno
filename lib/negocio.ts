@@ -24,3 +24,15 @@ export async function obtenerServicios(supabase: ClienteSupabase): Promise<Servi
     .order("nombre");
   return data ?? [];
 }
+
+export type Persona = { id: string; nombre: string; activo: boolean };
+
+/** Equipo del negocio del usuario: activos primero, después por nombre. */
+export async function obtenerPersonal(supabase: ClienteSupabase): Promise<Persona[]> {
+  const { data } = await supabase
+    .from("personal")
+    .select("id, nombre, activo")
+    .order("activo", { ascending: false })
+    .order("nombre");
+  return data ?? [];
+}
