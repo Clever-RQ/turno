@@ -30,8 +30,8 @@ Full plan: `docs/PLAN.md`.
 
 Tasks are GitHub issues on the "Turno – MVP" project board:
 - [x] #1 SQL migration with the tables
-- [ ] #2 RLS policies per table
-- [ ] #3 Login with email and Google (Supabase Auth)
+- [x] #2 RLS policies per table
+- [x] #3 Login with email and Google (Supabase Auth)
 - [ ] #4 Onboarding: business name and slug
 - [ ] #5 CRUD for services
 - [ ] #6 CRUD for staff
@@ -53,4 +53,5 @@ Known issues solved:
 - CI `Cannot find name 'LayoutProps'`: Next.js generates route types in `.next/`, which doesn't exist on a fresh checkout; fixed with `"typecheck": "next typegen && tsc --noEmit"`.
 - `next build` fails with "uncached or runtime data during prerendering": the project has `cacheComponents: true`, so anything that reads the request (`cookies()`, `searchParams`, Supabase session) must be inside `<Suspense>`. Only `next build` catches this, not lint/typecheck/test.
 - Next.js 16: `middleware.ts` is now `proxy.ts`.
+- Dev overlay "unstable value Date.now() while prerendering" on pages that read the session: `partialPrefetching` prefetches with cookies, and `getClaims()` compares the token expiry with `Date.now()`. Fix: `await connection()` before reading the session.
 - Auth emails: Supabase only allows editing templates with custom SMTP (Gmail account + app password). Templates live in `supabase/templates/` and use `{{ .RedirectTo }}?token_hash=...` so links work on any device.
