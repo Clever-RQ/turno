@@ -5,17 +5,21 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { primerNombre } from "@/lib/texto";
+import { EncabezadoOnboarding } from "../encabezado";
 import { FormularioOnboarding } from "./formulario";
 
 export const metadata: Metadata = { title: "Crea tu negocio · Turno" };
 
 export default function PaginaOnboarding() {
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-8 lg:py-12">
-      <Suspense fallback={<div className="h-[36rem] animate-pulse rounded-3xl bg-white/[0.03]" />}>
-        <Contenido />
-      </Suspense>
-    </main>
+    <>
+      <EncabezadoOnboarding paso={1} />
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-8 lg:py-12">
+        <Suspense fallback={<div className="h-[36rem] animate-pulse rounded-3xl bg-white/[0.03]" />}>
+          <Contenido />
+        </Suspense>
+      </main>
+    </>
   );
 }
 

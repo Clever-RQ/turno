@@ -91,5 +91,6 @@ export async function crearNegocio(
     return { mensaje: MENSAJE_GENERICO, slugEnviado };
   }
 
-  redirect("/panel?bienvenida=1");
+  // Paso 2: agregar servicios.
+  redirect("/onboarding/servicios");
 }

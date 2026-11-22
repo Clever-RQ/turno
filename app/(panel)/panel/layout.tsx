@@ -1,13 +1,13 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { Logo } from "@/components/logo";
+import { MenuMovil, NavegacionPanel } from "@/components/panel/navegacion";
+import { obtenerNegocio } from "@/lib/negocio";
 import { crearClienteServidor } from "@/lib/supabase/server";
 import { iniciales } from "@/lib/texto";
 import { cerrarSesion } from "../../(auth)/acciones";
-
-// Secciones del panel (se activan en los próximos sprints)
-const SECCIONES = ["Agenda", "Servicios", "Horarios", "Clientes", "Asistente IA", "Métricas"];
 
 /**
  * Quién protege el panel:
@@ -16,6 +16,12 @@ const SECCIONES = ["Agenda", "Servicios", "Horarios", "Clientes", "Asistente IA"
  * 3. RLS: aunque algo fallara arriba, la base de datos no devuelve datos ajenos.
  */
 export default function LayoutPanel({ children }: LayoutProps<"/panel">) {
+  const tarjeta = (
+    <Suspense fallback={<div className="h-[4.75rem] rounded-2xl bg-white/[0.05]" />}>
+      <TarjetaNegocio />
+    </Suspense>
+  );
+
   return (
     <div className="relative isolate flex min-h-dvh flex-1 flex-col gap-4 bg-fondo p-4 lg:flex-row lg:gap-8 lg:p-6">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -23,34 +29,17 @@ export default function LayoutPanel({ children }: LayoutProps<"/panel">) {
         <div className="absolute -bottom-48 -right-24 size-[30rem] rounded-full bg-esmeralda/10 blur-[140px]" />
       </div>
 
-      <aside className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5 lg:w-72 lg:shrink-0 lg:p-6">
-        <Logo className="h-8 w-auto self-start lg:ml-4 lg:mt-2" />
-
-        <nav aria-label="Secciones del panel" className="hidden lg:block">
-          <ul className="space-y-1">
-            {SECCIONES.map((seccion, i) => (
-              <li
-                key={seccion}
-                aria-current={i === 0 ? "page" : undefined}
-                className={
-                  i === 0
-                    ? "rounded-xl border border-esmeralda/40 bg-esmeralda/15 px-4 py-3 font-semibold text-white"
-                    : "px-4 py-3 text-white/40"
-                }
-              >
-                {seccion}
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* La sesión se lee en la petición: con cacheComponents va dentro de Suspense */}
-        <Suspense fallback={<div className="h-[4.25rem] rounded-2xl bg-white/[0.05] lg:mt-auto" />}>
-          <TarjetaNegocio />
-        </Suspense>
+      {/* Computadora: barra lateral */}
+      <aside className="hidden flex-col gap-6 rounded-3xl border border-white/10 bg-white/[0.03] p-6 lg:flex lg:w-72 lg:shrink-0">
+        <Logo className="ml-4 mt-2 h-8 w-auto self-start" />
+        <NavegacionPanel />
+        <div className="mt-auto">{tarjeta}</div>
       </aside>
 
-      <main className="flex-1 lg:py-2">{children}</main>
+      {/* Celular: barra superior con menú */}
+      <MenuMovil tarjeta={tarjeta} />
+
+      <main className="min-w-0 flex-1 lg:py-2">{children}</main>
     </div>
   );
 }
@@ -63,18 +52,21 @@ async function TarjetaNegocio() {
   const { data } = await supabase.auth.getClaims();
   if (!data?.claims) redirect("/login");
 
-  // Por RLS solo puede volver el negocio de este dueño (y hay uno como máximo: unique owner_id).
-  const { data: negocio } = await supabase.from("negocios").select("nombre").maybeSingle();
+  const negocio = await obtenerNegocio(supabase);
   if (!negocio) redirect("/onboarding");
 
+  const dominio = (await headers()).get("host") ?? "turno-eta-seven.vercel.app";
+
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.05] p-3 lg:mt-auto">
+    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.05] p-3">
       <span className="grid size-11 shrink-0 place-items-center rounded-full bg-menta font-titulo font-bold text-tinta">
         {iniciales(negocio.nombre)}
       </span>
       <div className="min-w-0 flex-1">
         <p className="truncate font-semibold text-white">{negocio.nombre}</p>
-        <p className="truncate text-sm text-white/60">{data.claims.email}</p>
+        <p className="truncate text-sm text-white/60">
+          {dominio}/{negocio.slug}
+        </p>
       </div>
       <form action={cerrarSesion}>
         <button

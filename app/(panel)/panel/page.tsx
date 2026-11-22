@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { BannerBienvenida } from "@/components/panel/banner-bienvenida";
@@ -18,12 +19,38 @@ export default function PaginaPanel({ searchParams }: PageProps<"/panel">) {
       <h1 className="font-titulo text-4xl font-bold tracking-tight text-white sm:text-5xl">
         Bienvenido a Turno
       </h1>
+      <Suspense fallback={null}>
+        <AvisoSinServicios />
+      </Suspense>
       <section className="max-w-2xl rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
         <p className="text-lg text-white/80">
-          Tu negocio está creado. Pronto podrás agregar tus servicios, tu personal y tus horarios
+          Tu negocio está creado. Pronto podrás agregar tu personal y tus horarios
           desde aquí.
         </p>
       </section>
+    </div>
+  );
+}
+
+// Sin servicios no se puede reservar: se lo recordamos al dueño hasta que agregue uno.
+async function AvisoSinServicios() {
+  await connection();
+  const supabase = await crearClienteServidor();
+  const { count } = await supabase.from("servicios").select("id", { count: "exact", head: true });
+  if (count) return null;
+
+  return (
+    <div role="status" className="flex flex-col gap-4 rounded-3xl border border-amber-300/30 bg-amber-300/10 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+      <div>
+        <p className="font-titulo text-lg font-bold text-white">Agrega tus servicios para recibir reservas</p>
+        <p className="mt-1 text-white/75">Tus clientes necesitan elegir un servicio para reservar contigo.</p>
+      </div>
+      <Link
+        href="/panel/servicios"
+        className="shrink-0 rounded-xl bg-esmeralda px-5 py-3 text-center font-medium text-tinta transition hover:bg-emerald-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-enlace"
+      >
+        Agregar servicios
+      </Link>
     </div>
   );
 }
