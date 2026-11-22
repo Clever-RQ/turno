@@ -55,3 +55,6 @@ Known issues solved:
 - Next.js 16: `middleware.ts` is now `proxy.ts`.
 - Dev overlay "unstable value Date.now() while prerendering" on pages that read the session: `partialPrefetching` prefetches with cookies, and `getClaims()` compares the token expiry with `Date.now()`. Fix: `await connection()` before reading the session.
 - Auth emails: Supabase only allows editing templates with custom SMTP (Gmail account + app password). Templates live in `supabase/templates/` and use `{{ .RedirectTo }}?token_hash=...` so links work on any device.
+
+Ideas for later sprints (decided, not started):
+- Sprint 3: business logo in a "Mi negocio" panel screen, using Supabase Storage (bucket `logos`, public read, owner-only write under `{negocio_id}/`). Accept PNG/JPG/WebP only (no SVG: XSS risk), max ~2 MB, crop square and resize to 256 px. Falls back to initials.
