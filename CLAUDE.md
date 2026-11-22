@@ -29,7 +29,7 @@ Full plan: `docs/PLAN.md`.
 **Sprint 1 — Data and owner access (next, 30 Nov – 6 Dec)**
 
 Tasks are GitHub issues on the "Turno – MVP" project board:
-- [ ] #1 SQL migration with the tables
+- [x] #1 SQL migration with the tables
 - [ ] #2 RLS policies per table
 - [ ] #3 Login with email and Google (Supabase Auth)
 - [ ] #4 Onboarding: business name and slug
