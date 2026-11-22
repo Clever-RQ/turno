@@ -6,6 +6,8 @@ Customers book from the business's link or QR code, using a calendar or by chatt
 
 > Work in progress. MVP planned for January 2027.
 
+**Live:** https://turno-eta-seven.vercel.app
+
 ## Stack
 
 - Next.js (App Router), TypeScript, Tailwind CSS
