@@ -26,25 +26,28 @@ Turno is a **web app** (mobile-first, no native app in the MVP) for small busine
 Full plan: `docs/PLAN.md`.
 
 ## Current status
-**Sprint 0 — Setup (in progress)**
+**Sprint 1 — Data and owner access (next, 30 Nov – 6 Dec)**
 
-Done:
-- [x] Supabase project created
-- [x] GitHub repo created and cloned
-- [x] Next.js app created with `create-next-app` (recommended defaults: TypeScript, ESLint, Tailwind, App Router, no `src/`)
-- [x] Installed dev deps: `vitest`, `prettier`, `@types/node` (matching my Node major)
+Tasks are GitHub issues on the "Turno – MVP" project board:
+- [ ] #1 SQL migration with the tables
+- [ ] #2 RLS policies per table
+- [ ] #3 Login with email and Google (Supabase Auth)
+- [ ] #4 Onboarding: business name and slug
+- [ ] #5 CRUD for services
+- [ ] #6 CRUD for staff
+- [ ] #7 CRUD for schedules and days off
+- [ ] #8 RLS tests: an owner can't read another owner's data
 
-Pending:
-- [x] Add scripts to package.json: `typecheck` (`tsc --noEmit`), `test` (`vitest run`), `format` (`prettier --write .`)
-- [x] Add starter files: `.github/workflows/ci.yml`, `vitest.config.mts`, `.env.example`, `tests/smoke.test.ts`, `README.md`
-- [x] `npm run lint`, `npm run typecheck`, `npm run test` all pass
-- [x] First commit + push; GitHub Actions CI green
-- [x] Create `.env.local` with Supabase URL and keys
-- [x] Install Supabase CLI (`npm i -D supabase`), `npx supabase init`, `login`, `link --project-ref <ref>`
-- [x] Import repo in Vercel, add env vars, deploy
-- [ ] GitHub Projects board with Sprint 1 tasks
-- [ ] Final check: small change → push → CI green → visible on Vercel URL
+Done when: two test accounts can't see each other's data.
+
+**Sprint 0 — Setup: done (22 Nov 2026)**
+- Next.js 16 + TypeScript + Tailwind + ESLint + Prettier + Vitest
+- CI on GitHub Actions (lint, typecheck, test), green on `main`
+- Supabase CLI installed and linked (project ref `xjrzswgxfxwhbphrkoxc`, Postgres 17)
+- Vercel deploys `main` automatically: https://turno-eta-seven.vercel.app
+- Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` (in `.env.local` and Vercel)
 
 Known issues solved:
 - `EALLOWSCRIPTS` on install: caused by `allow-scripts` in user `.npmrc`; fixed with `npm config delete allow-scripts --location=user`.
 - `ERESOLVE` installing vitest: `@types/node@20` conflicted with vitest's peer range; fixed by installing `@types/node` matching Node 22/24.
+- CI `Cannot find name 'LayoutProps'`: Next.js generates route types in `.next/`, which doesn't exist on a fresh checkout; fixed with `"typecheck": "next typegen && tsc --noEmit"`.
