@@ -38,7 +38,7 @@ Pending:
 - [x] Add scripts to package.json: `typecheck` (`tsc --noEmit`), `test` (`vitest run`), `format` (`prettier --write .`)
 - [x] Add starter files: `.github/workflows/ci.yml`, `vitest.config.mts`, `.env.example`, `tests/smoke.test.ts`, `README.md`
 - [x] `npm run lint`, `npm run typecheck`, `npm run test` all pass
-- [ ] First commit + push; GitHub Actions CI green
+- [x] First commit + push; GitHub Actions CI green
 - [ ] Create `.env.local` with Supabase URL and keys
 - [ ] Install Supabase CLI (`npm i -D supabase`), `npx supabase init`, `login`, `link --project-ref <ref>`
 - [ ] Import repo in Vercel, add env vars, deploy
