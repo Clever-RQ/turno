@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { FORMATO_SLUG, esSlugReservado } from "./slug";
+import { normalizarTelefono } from "./telefono";
 
 // -------------------------------------------------------------
 // Autenticación
@@ -52,3 +54,46 @@ export const nuevaContrasenaSchema = z
     error: "Las contraseñas no coinciden.",
     path: ["confirmacion"],
   });
+
+// -------------------------------------------------------------
+// Onboarding del negocio (#4)
+// -------------------------------------------------------------
+
+export const MENSAJES_SLUG = {
+  corto: "Usa al menos 3 caracteres: letras, números y guiones.",
+  formato: "Solo letras minúsculas, números y guiones (sin guion al inicio ni al final).",
+  reservado: "Ese link está reservado, elige otro.",
+} as const;
+
+export const slugSchema = z
+  .string()
+  .trim()
+  .min(3, { error: MENSAJES_SLUG.corto })
+  .max(60, { error: "Usa como máximo 60 caracteres." })
+  .regex(FORMATO_SLUG, { error: MENSAJES_SLUG.formato })
+  .refine((slug) => !esSlugReservado(slug), { error: MENSAJES_SLUG.reservado });
+
+export const onboardingSchema = z.object({
+  nombre: z
+    .string()
+    .trim()
+    .min(2, { error: "Escribe el nombre de tu negocio." })
+    .max(80, { error: "El nombre es muy largo." }),
+  slug: slugSchema,
+  // Opcional: vacío -> null; con texto -> +51… o error.
+  telefono: z
+    .string()
+    .optional()
+    .transform((valor, ctx) => {
+      if (!valor?.trim()) return null;
+      const normalizado = normalizarTelefono(valor);
+      if (!normalizado) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Escribe un celular de 9 dígitos o un fijo con su código (por ejemplo 01 234 5678).",
+        });
+        return z.NEVER;
+      }
+      return normalizado;
+    }),
+});

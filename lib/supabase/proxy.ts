@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const RUTAS_PRIVADAS = ["/panel"];
+const RUTAS_PRIVADAS = ["/panel", "/onboarding"];
 const RUTAS_SOLO_INVITADOS = ["/login", "/registro"];
 
 /**
