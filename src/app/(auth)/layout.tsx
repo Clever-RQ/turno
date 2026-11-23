@@ -1,5 +1,6 @@
 import { EscenaAgenda } from "@/components/brand/escena-agenda";
 import { FondoRelojes } from "@/components/brand/fondo-relojes";
+import { LuzCursor } from "@/components/brand/luz-cursor";
 import { MascotaReloj } from "@/components/brand/mascota-reloj";
 import { Logo } from "@/components/ui/logo";
 
@@ -17,6 +18,9 @@ export default function LayoutAuth({ children }: LayoutProps<"/">) {
         <div className="absolute -left-48 -top-48 size-[38rem] rounded-full bg-esmeralda/20 blur-[150px]" />
         <div className="absolute -bottom-56 -right-32 size-[32rem] rounded-full bg-esmeralda/10 blur-[150px]" />
         <FondoRelojes />
+        <LuzCursor>
+          <FondoRelojes intensidad="encendido" />
+        </LuzCursor>
       </div>
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 py-5 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16 lg:py-10">

@@ -1,16 +1,8 @@
 "use client";
 
-/**
- * Vibración corta al tocar el interruptor (Android y la mayoría de navegadores móviles).
- * iPhone no tiene navigator.vibrate: ahí la da el atributo "switch" del input.
- */
-function vibrar() {
-  try {
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) navigator.vibrate?.(8);
-  } catch {
-    // Sin soporte: no pasa nada.
-  }
-}
+import { vibrar } from "./vibrar";
+
+// iPhone no tiene navigator.vibrate: ahí la vibración la da el atributo "switch" del input.
 
 /** Interruptor (checkbox con aspecto de switch). Accesible: es un checkbox real. */
 export function Interruptor({

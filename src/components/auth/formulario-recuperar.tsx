@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { useVibrarConError } from "@/components/ui/vibrar";
 import { AvisoCorreo, AvisoError, TarjetaAuth } from "@/components/ui/avisos";
 import { BotonEnviar } from "@/components/auth/botones";
 import { Campo } from "@/components/ui/campo";
@@ -9,6 +10,7 @@ import { enviarEnlaceRecuperacion, type EstadoFormulario } from "@/server/action
 
 export function FormularioRecuperar() {
   const [estado, accion] = useActionState<EstadoFormulario, FormData>(enviarEnlaceRecuperacion, {});
+  const refFormulario = useVibrarConError(estado);
 
   return (
     <TarjetaAuth
@@ -23,7 +25,7 @@ export function FormularioRecuperar() {
         </Link>
       }
     >
-      <form action={accion} noValidate className="space-y-6">
+      <form ref={refFormulario} action={accion} noValidate className="space-y-6">
         {estado.mensaje && <AvisoError>{estado.mensaje}</AvisoError>}
 
         <Campo

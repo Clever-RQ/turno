@@ -125,3 +125,37 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .anim-vaiven { animation: none; }
 }
+
+/* -------------------------------------------------------------
+   Luz que sigue al mouse (login). La posición la escribe LuzCursor.
+------------------------------------------------------------- */
+.luz-cursor {
+  --luz-x: 50%;
+  --luz-y: 50%;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+.luz-cursor[data-activa] { opacity: 1; }
+.luz-cursor-brillo {
+  background: radial-gradient(460px circle at var(--luz-x) var(--luz-y), rgba(16, 185, 129, 0.18), transparent 65%);
+}
+/* Los relojes del fondo se "encienden" solo cerca del cursor */
+.luz-cursor-revelado {
+  mask-image: radial-gradient(220px circle at var(--luz-x) var(--luz-y), #000, transparent 70%);
+}
+
+/* El formulario vibra cuando el servidor devuelve un error */
+@keyframes vibrar {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-9px); }
+  30% { transform: translateX(8px); }
+  45% { transform: translateX(-6px); }
+  60% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+.anim-vibrar { animation: vibrar 460ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .luz-cursor { display: none; }
+  .anim-vibrar { animation: none; }
+}

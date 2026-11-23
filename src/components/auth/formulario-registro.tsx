@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { useVibrarConError } from "@/components/ui/vibrar";
 import { AvisoCorreo, AvisoError, Separador, TarjetaAuth, claseEnlace } from "@/components/ui/avisos";
 import { BotonEnviar, BotonGoogle } from "@/components/auth/botones";
 import { Campo } from "@/components/ui/campo";
@@ -10,6 +11,7 @@ import { iniciarConGoogle, registrarse, type EstadoFormulario } from "@/server/a
 
 export function FormularioRegistro() {
   const [estado, accion] = useActionState<EstadoFormulario, FormData>(registrarse, {});
+  const refFormulario = useVibrarConError(estado);
 
   // Pantalla "Revisa tu correo" después de registrarse
   if (estado.ok) {
@@ -40,7 +42,7 @@ export function FormularioRegistro() {
 
       <Separador texto="o con tu correo" />
 
-      <form action={accion} noValidate className="space-y-6">
+      <form ref={refFormulario} action={accion} noValidate className="space-y-6">
         {estado.mensaje && <AvisoError>{estado.mensaje}</AvisoError>}
 
         <Campo

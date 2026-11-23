@@ -14,14 +14,15 @@ const RELOJES = [
   { x: "88%", y: "92%", tam: 34, hora: 330 },
 ] as const;
 
-export function FondoRelojes() {
+/** "tenue": textura de fondo. "encendido": la copia que se ve cerca del cursor (LuzCursor). */
+export function FondoRelojes({ intensidad = "tenue" }: { intensidad?: "tenue" | "encendido" }) {
   return (
     <div aria-hidden="true" className="absolute inset-0 hidden lg:block">
       {RELOJES.map(({ x, y, tam, hora }) => (
         <svg
           key={`${x}-${y}`}
           viewBox="0 0 24 24"
-          className="absolute -translate-x-1/2 -translate-y-1/2 opacity-[0.11]"
+          className={`absolute -translate-x-1/2 -translate-y-1/2 ${intensidad === "encendido" ? "opacity-60" : "opacity-[0.11]"}`}
           style={{ left: x, top: y, width: tam, height: tam }}
         >
           <circle cx="12" cy="12" r="9" fill="none" stroke="#FFFFFF" strokeWidth="3" />

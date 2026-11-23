@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useVibrarConError } from "@/components/ui/vibrar";
 import { AvisoError } from "@/components/ui/avisos";
 import { BotonEnviar } from "@/components/auth/botones";
 import { CampoContrasena } from "@/components/ui/campo-contrasena";
@@ -8,9 +9,10 @@ import { guardarNuevaContrasena, type EstadoFormulario } from "@/server/actions/
 
 export function FormularioNuevaContrasena() {
   const [estado, accion] = useActionState<EstadoFormulario, FormData>(guardarNuevaContrasena, {});
+  const refFormulario = useVibrarConError(estado);
 
   return (
-    <form action={accion} noValidate className="space-y-6">
+    <form ref={refFormulario} action={accion} noValidate className="space-y-6">
       {estado.mensaje && <AvisoError>{estado.mensaje}</AvisoError>}
 
       <CampoContrasena
