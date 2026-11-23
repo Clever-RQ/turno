@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import { loadEnv } from "vite";
 import { defineConfig } from "vitest/config";
 
@@ -7,6 +8,9 @@ import { defineConfig } from "vitest/config";
  * Variables: .env.local en tu máquina, secrets de GitHub en el CI.
  */
 export default defineConfig(({ mode }) => ({
+  resolve: {
+    alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
+  },
   test: {
     environment: "node",
     include: ["tests/rls/**/*.test.ts"],

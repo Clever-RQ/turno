@@ -36,27 +36,37 @@ La IA se llama solo desde el servidor.
 
 ## Estructura del repo (objetivo final, se crea sprint a sprint)
 
+Un solo proyecto Next.js, separado en capas dentro de `src/`. La frontera backend/frontend la hace cumplir el paquete `server-only`: si un componente del navegador importa algo de `src/server/`, el build falla.
+
 ```text
 turno/
-  app/
-    (publico)/[slug]/        página de reservas del negocio
-    (panel)/panel/           agenda, servicios, horarios, métricas
-    api/reservas/            crear y cancelar reservas
-    api/asistente/           chat con tool calling
-    api/visitas/             registrar visitas y escaneos
-    api/cron/recordatorios/  correos 24 h antes
-  lib/
-    disponibilidad.ts        cálculo de horarios libres (función pura)
-    herramientas.ts          herramientas compartidas por IA y WebMCP
-    esquemas.ts              esquemas Zod
-    supabase/                clientes de servidor y navegador
-  components/                UI y avatar del asistente
-  supabase/migrations/       SQL versionado
-  tests/                     Vitest y Playwright
+  src/
+    app/                       solo rutas: páginas, layouts y route handlers
+      (publico)/[slug]/        página de reservas del negocio
+      (panel)/panel/           agenda, servicios, equipo, horarios, métricas
+      api/reservas/            crear y cancelar reservas
+      api/asistente/           chat con tool calling
+      api/visitas/             registrar visitas y escaneos
+      api/cron/recordatorios/  correos 24 h antes
+    components/                interfaz, por área
+      ui/                      piezas genéricas (campos, interruptor, íconos, logo)
+      brand/                   el asistente: avatar, confirmar, avisos
+      auth/ onboarding/ panel/ services/ team/ schedules/ …
+    server/                    BACKEND: solo corre en el servidor
+      actions/                 server actions por área
+      data/                    consultas a Supabase
+      supabase/                clientes de servidor y proxy de sesión
+      tools/herramientas.ts    herramientas compartidas por IA y WebMCP
+    domain/                    lógica pura, sin base de datos
+      disponibilidad.ts        cálculo de horarios libres
+      esquemas.ts              esquemas Zod
+    proxy.ts                   renueva la sesión y protege rutas
+  supabase/migrations/         SQL versionado
+  tests/unit/  tests/rls/      Vitest (y Playwright desde el Sprint 3)
   .github/workflows/ci.yml
 ```
 
-`lib/herramientas.ts` es la pieza clave: las mismas funciones (`ver_disponibilidad`, `crear_reserva`, etc.) las usan el asistente y WebMCP. Toda reserva pasa por ahí antes de llegar a Supabase.
+`src/server/tools/herramientas.ts` es la pieza clave: las mismas funciones (`ver_disponibilidad`, `crear_reserva`, etc.) las usan el asistente y WebMCP. Toda reserva pasa por ahí antes de llegar a Supabase.
 
 ## Modelo de datos
 
@@ -217,7 +227,7 @@ Listo cuando: dos reservas simultáneas al mismo horario dejan solo una guardada
 Listo cuando: la prueba Playwright pasa en el CI.
 
 ### Sprint 4 — Asistente con IA (21–27 dic, semana ligera)
-- [ ] `lib/herramientas.ts`: `ver_servicios`, `ver_disponibilidad`, `crear_reserva`, `cancelar_reserva`
+- [ ] `src/server/tools/herramientas.ts`: `ver_servicios`, `ver_disponibilidad`, `crear_reserva`, `cancelar_reserva`
 - [ ] `POST /api/asistente` con tool calling y argumentos validados con Zod
 - [ ] Prompt del sistema con datos del negocio; no inventa precios ni horarios
 - [ ] `crear_reserva` solo tras confirmación del cliente en la tarjeta
