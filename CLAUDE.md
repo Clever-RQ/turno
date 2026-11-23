@@ -26,23 +26,31 @@ Turno is a **web app** (mobile-first, no native app in the MVP) for small busine
 Full plan: `docs/PLAN.md`.
 
 ## Current status
-**Sprint 1 — Data and owner access (next, 30 Nov – 6 Dec)**
+**Sprint 2 — Free slots and public booking (next, 7–13 Dec)**
 
-Tasks are GitHub issues on the "Turno – MVP" project board:
-- [x] #1 SQL migration with the tables
-- [x] #2 RLS policies per table
-- [x] #3 Login with email and Google (Supabase Auth)
-- [x] #4 Onboarding: business name and slug
-- [x] #5 CRUD for services
-- [x] #6 CRUD for staff
-- [x] #7 CRUD for schedules and days off
-- [x] #8 RLS tests: an owner can't read another owner's data (`npm run test:rls`)
+Tasks (create them as GitHub issues on the "Turno – MVP" board, then add the numbers here):
+- [ ] `calcularHorariosLibres(servicio, fecha)` in `lib/disponibilidad.ts`, pure function, no DB. **Clever writes it** (TDD: Claude writes the tests first, then guides without giving the solution)
+- [ ] Vitest for it: business hours, split shifts, per-person schedules (`personal.horario_propio`), days off, existing bookings, service duration, Lima time, past hours
+- [ ] Public page `/[slug]` with services and a calendar (read with a client WITHOUT session: public policies are `anon` only)
+- [ ] `POST /api/reservas` with Zod and rate limiting. **Clever writes it**, Claude guides and reviews
+- [ ] Confirmation email with Resend
 
-Done when: two test accounts can't see each other's data.
+Done when: two simultaneous bookings for the same slot leave only one saved (the `reservas_sin_cruce` exclude already guarantees it; prove it with a test).
+
+Notes for Sprint 2:
+- Data the function needs already exists: `horarios` (null `personal_id` = business; per-person rows only when `horario_propio`), `bloqueos` (UTC instants), `reservas` (active = `pendiente`/`confirmada`), `negocios.zona_horaria`.
+- Helpers to reuse: `lib/fechas.ts` (Lima ↔ UTC), `lib/horarios.ts` (`aMinutos`, `filasASemana`).
+- `/[slug]` must not collide with app routes: reserved slugs live in `lib/slug.ts` and in the DB check.
+
+**Sprint 1 — Data and owner access: done (23 Nov 2026, issues #1–#8, PRs #9–#17)**
+- Tables, RLS + grants, composite FKs, one business per owner, reserved slugs, `slug_disponible()`, `guardar_horario()`.
+- Email/password + Google login, onboarding (business + services), panel: Servicios, Equipo, Horarios (weekly + days off).
+- Branded UI pieces: `components/panel/confirmar.tsx` (replaces `window.confirm`), `aviso-asistente.tsx`, `avatar-asistente.tsx` (atento / pensando / confirmó), shared side panel `dialogo-lateral.tsx`, animated switch.
+- Tests: 83 unit (`npm run test`) + 20 RLS isolation against the real project (`npm run test:rls`, also in CI with repo secrets).
 
 **Sprint 0 — Setup: done (22 Nov 2026)**
 - Next.js 16 + TypeScript + Tailwind + ESLint + Prettier + Vitest
-- CI on GitHub Actions (lint, typecheck, test), green on `main`
+- CI on GitHub Actions (lint, typecheck, test, build, RLS tests), green on `main`
 - Supabase CLI installed and linked (project ref `xjrzswgxfxwhbphrkoxc`, Postgres 17)
 - Vercel deploys `main` automatically: https://turno-eta-seven.vercel.app
 - Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY` (in `.env.local` and Vercel)
