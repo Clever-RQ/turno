@@ -33,7 +33,15 @@ export function formatearPrecio(precio: number | null): string {
 }
 
 /** "30 min · S/ 25" (sin el precio si no tiene). */
+/** 30 -> "30 min" · 60 -> "1 h" · 90 -> "1 h 30 min" */
+export function formatearDuracion(minutos: number): string {
+  const horas = Math.floor(minutos / 60);
+  const resto = minutos % 60;
+  if (!horas) return `${resto} min`;
+  return resto ? `${horas} h ${resto} min` : `${horas} h`;
+}
+
 export function resumenServicio(servicio: Pick<Servicio, "duracion_min" | "precio">): string {
-  const duracion = `${servicio.duracion_min} min`;
+  const duracion = formatearDuracion(servicio.duracion_min);
   return servicio.precio === null ? duracion : `${duracion} · ${formatearPrecio(servicio.precio)}`;
 }

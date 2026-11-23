@@ -70,3 +70,25 @@ export function partesFecha(fecha: string): { dia: number; mes: string } {
   const [, m, d] = fecha.split("-").map(Number);
   return { dia: d, mes: MESES_CORTOS[m - 1] };
 }
+
+/** "Domingo 22 de noviembre" en la zona del negocio. */
+export function fechaLarga(instante: Date, zona: string): string {
+  const texto = new Intl.DateTimeFormat("es-PE", { weekday: "long", day: "numeric", month: "long", timeZone: zona })
+    .format(instante)
+    .replace(",", "");
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+/** Saludo según la hora local: mañana hasta las 12, tarde hasta las 19, noche después. */
+export function saludo(instante: Date, zona: string): string {
+  const hora = Number(enZona(instante, zona).hora.slice(0, 2));
+  if (hora >= 5 && hora < 12) return "Buenos días";
+  if (hora >= 12 && hora < 19) return "Buenas tardes";
+  return "Buenas noches";
+}
+
+/** Día de la semana (0 = domingo) de una fecha "2026-11-22". */
+export function diaDeSemana(fecha: string): number {
+  const [a, m, d] = fecha.split("-").map(Number);
+  return new Date(Date.UTC(a, m - 1, d)).getUTCDay();
+}

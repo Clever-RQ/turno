@@ -62,12 +62,16 @@ export function Interruptor({
           "motion-reduce:transition-none motion-reduce:after:transition-none",
         ].join(" ")}
       />
-      <span aria-hidden="true" className="text-white/60 peer-checked:hidden">
-        {textoInactivo}
-      </span>
-      <span aria-hidden="true" className="hidden font-medium text-enlace peer-checked:inline">
-        {textoActivo}
-      </span>
+      {textoInactivo && (
+        <span aria-hidden="true" className="text-white/60 peer-checked:hidden">
+          {textoInactivo}
+        </span>
+      )}
+      {textoActivo && (
+        <span aria-hidden="true" className="hidden font-medium text-enlace peer-checked:inline">
+          {textoActivo}
+        </span>
+      )}
     </span>
   );
 }
