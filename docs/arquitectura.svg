@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="1200" height="660" role="img" aria-labelledby="titulo desc" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title id="titulo">Arquitectura de Turno</title>
+  <desc id="desc">El navegador habla con una sola app Next.js en Vercel, separada en capas (proxy, rutas, servidor y dominio). El servidor consulta Supabase: Auth y PostgreSQL con RLS.</desc>
+  <defs>
+    <marker id="flecha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#10B981"/>
+    </marker>
+    <radialGradient id="brillo" cx="0.08" cy="0" r="0.9">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Fondo propio: se ve igual con el tema claro y oscuro de GitHub -->
+  <rect width="1200" height="660" rx="28" fill="#0B1F1A"/>
+  <rect width="1200" height="660" rx="28" fill="url(#brillo)"/>
+
+  <text x="48" y="66" fill="#FFFFFF" font-size="28" font-weight="700">Arquitectura de Turno</text>
+  <text x="48" y="96" fill="#9DBDB1" font-size="16">Una sola app Next.js separada en capas. La base de datos es la última línea de defensa.</text>
+
+  <!-- ============ Navegador ============ -->
+  <rect x="48" y="140" width="210" height="400" rx="20" fill="#112B23" stroke="#24493C"/>
+  <text x="72" y="178" fill="#6EE7B7" font-size="15" font-weight="700">NAVEGADOR</text>
+
+  <rect x="68" y="200" width="170" height="86" rx="14" fill="#16362C"/>
+  <text x="86" y="232" fill="#FFFFFF" font-size="17" font-weight="700">Cliente</text>
+  <text x="86" y="256" fill="#9DBDB1" font-size="13">Reserva desde el</text>
+  <text x="86" y="274" fill="#9DBDB1" font-size="13">link o el QR</text>
+
+  <rect x="68" y="302" width="170" height="86" rx="14" fill="#16362C"/>
+  <text x="86" y="334" fill="#FFFFFF" font-size="17" font-weight="700">Dueño</text>
+  <text x="86" y="358" fill="#9DBDB1" font-size="13">Gestiona servicios,</text>
+  <text x="86" y="376" fill="#9DBDB1" font-size="13">equipo y horarios</text>
+
+  <rect x="68" y="404" width="170" height="116" rx="14" fill="none" stroke="#24493C" stroke-dasharray="5 5"/>
+  <text x="86" y="436" fill="#FFFFFF" font-size="15" font-weight="700">src/components</text>
+  <text x="86" y="460" fill="#9DBDB1" font-size="13">Interfaz en React,</text>
+  <text x="86" y="478" fill="#9DBDB1" font-size="13">mobile-first, con</text>
+  <text x="86" y="496" fill="#9DBDB1" font-size="13">la marca de Turno</text>
+
+  <!-- Navegador -> Next.js -->
+  <line x1="262" y1="340" x2="304" y2="340" stroke="#10B981" stroke-width="2.5" marker-end="url(#flecha)"/>
+
+  <!-- ============ Next.js en Vercel ============ -->
+  <rect x="310" y="140" width="560" height="400" rx="20" fill="#112B23" stroke="#24493C"/>
+  <text x="334" y="178" fill="#6EE7B7" font-size="15" font-weight="700">NEXT.JS 16 · VERCEL</text>
+
+  <rect x="334" y="198" width="512" height="58" rx="12" fill="#16362C"/>
+  <text x="356" y="233" fill="#FFFFFF" font-size="17" font-weight="700">proxy.ts</text>
+  <text x="496" y="233" fill="#9DBDB1" font-size="14">Renueva la sesión y protege el panel</text>
+
+  <rect x="334" y="268" width="512" height="58" rx="12" fill="#16362C"/>
+  <text x="356" y="303" fill="#FFFFFF" font-size="17" font-weight="700">src/app</text>
+  <text x="496" y="303" fill="#9DBDB1" font-size="14">Solo rutas: páginas, layouts y endpoints</text>
+
+  <rect x="334" y="338" width="512" height="96" rx="12" fill="#163D30" stroke="#10B981" stroke-opacity="0.55"/>
+  <text x="356" y="374" fill="#FFFFFF" font-size="17" font-weight="700">src/server</text>
+  <text x="496" y="374" fill="#D1FAE5" font-size="14">Acciones, consultas y clientes de Supabase</text>
+  <rect x="356" y="392" width="112" height="28" rx="14" fill="#10B981"/>
+  <text x="412" y="411" fill="#0B1F1A" font-size="13" font-weight="700" text-anchor="middle">server-only</text>
+  <text x="482" y="411" fill="#9DBDB1" font-size="13">Si el navegador lo importa, el build falla</text>
+
+  <rect x="334" y="446" width="512" height="74" rx="12" fill="#16362C"/>
+  <text x="356" y="478" fill="#FFFFFF" font-size="17" font-weight="700">src/domain</text>
+  <text x="496" y="478" fill="#9DBDB1" font-size="14">Lógica pura: Zod, fechas, horarios, slugs</text>
+  <text x="496" y="500" fill="#6EE7B7" font-size="13">Compartida por navegador y servidor · con pruebas</text>
+
+  <!-- Next.js -> Supabase -->
+  <line x1="850" y1="227" x2="918" y2="227" stroke="#10B981" stroke-width="2.5" marker-end="url(#flecha)"/>
+  <line x1="850" y1="386" x2="918" y2="386" stroke="#10B981" stroke-width="2.5" marker-end="url(#flecha)"/>
+
+  <!-- ============ Supabase ============ -->
+  <rect x="924" y="140" width="228" height="400" rx="20" fill="#112B23" stroke="#24493C"/>
+  <text x="948" y="178" fill="#6EE7B7" font-size="15" font-weight="700">SUPABASE</text>
+
+  <rect x="944" y="198" width="188" height="58" rx="12" fill="#16362C"/>
+  <text x="964" y="224" fill="#FFFFFF" font-size="17" font-weight="700">Auth</text>
+  <text x="964" y="244" fill="#9DBDB1" font-size="13">Correo y Google</text>
+
+  <rect x="944" y="268" width="188" height="252" rx="12" fill="#16362C"/>
+  <text x="964" y="300" fill="#FFFFFF" font-size="17" font-weight="700">PostgreSQL</text>
+  <g font-size="13" fill="#D1FAE5">
+    <rect x="962" y="318" width="152" height="30" rx="15" fill="#0B1F1A" stroke="#24493C"/>
+    <text x="1038" y="338" text-anchor="middle">RLS por dueño</text>
+    <rect x="962" y="358" width="152" height="30" rx="15" fill="#0B1F1A" stroke="#24493C"/>
+    <text x="1038" y="378" text-anchor="middle">FK compuestas</text>
+    <rect x="962" y="398" width="152" height="30" rx="15" fill="#0B1F1A" stroke="#24493C"/>
+    <text x="1038" y="418" text-anchor="middle">Citas sin cruce</text>
+    <rect x="962" y="438" width="152" height="30" rx="15" fill="#0B1F1A" stroke="#24493C"/>
+    <text x="1038" y="458" text-anchor="middle">Transacciones</text>
+  </g>
+  <text x="964" y="500" fill="#9DBDB1" font-size="12">Migraciones versionadas</text>
+
+  <!-- ============ Pie: pruebas y CI ============ -->
+  <rect x="48" y="568" width="1104" height="56" rx="16" fill="#112B23" stroke="#24493C"/>
+  <circle cx="78" cy="596" r="6" fill="#10B981"/>
+  <text x="96" y="601" fill="#FFFFFF" font-size="15" font-weight="700">Probado en cada pull request:</text>
+  <text x="312" y="601" fill="#9DBDB1" font-size="15">lint, tipos, 83 pruebas unitarias, build y 20 pruebas de aislamiento contra Supabase</text>
+</svg>

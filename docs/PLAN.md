@@ -183,7 +183,7 @@ create table visitas (
 | UI | Implementa las pantallas del diseño | Ajustes y componentes base |
 | IA | Integra tool calling y define límites | Prompt del sistema y conversaciones de prueba |
 | Pruebas y CI | Mantiene el CI en verde | Workflow inicial y pruebas base |
-| Documentación | Video demo y post de LinkedIn | README en inglés y borrador del post |
+| Documentación | Video demo y post de LinkedIn | README en español y borrador del post |
 
 ## Sprints
 
@@ -193,7 +193,7 @@ Objetivo: un repo que se prueba y se despliega solo.
 - [ ] Proyecto Supabase + CLI para migraciones
 - [ ] Repo conectado a Vercel
 - [ ] GitHub Actions: lint, typecheck, test
-- [ ] `.env.example` y README en inglés
+- [ ] `.env.example` y README en español
 - [ ] Tablero en GitHub Projects
 
 Listo cuando: un push a `main` pasa el CI y aparece en la URL de Vercel.
@@ -250,7 +250,7 @@ Listo cuando: escanear un QR y reservar suma una visita y una cita a esa fuente.
 - [ ] Revisión de seguridad: RLS, límites, claves solo en servidor
 - [ ] Accesibilidad y Lighthouse en la página pública
 - [ ] Configurar negocio piloto e imprimir su QR
-- [ ] README en inglés con capturas, arquitectura y cómo correrlo
+- [ ] README en español con capturas, arquitectura y cómo correrlo
 - [ ] Video demo de 2 minutos
 - [ ] Post en LinkedIn y repo fijado en GitHub
 
