@@ -1,13 +1,12 @@
 import { EscenaAgenda } from "@/components/brand/escena-agenda";
 import { FondoRelojes } from "@/components/brand/fondo-relojes";
 import { LuzCursor } from "@/components/brand/luz-cursor";
-import { MascotaReloj } from "@/components/brand/mascota-reloj";
 import { Logo } from "@/components/ui/logo";
 
 /**
  * Layout de login, registro y recuperación.
  * Computadora: titular + el asistente con la agenda llenándose sola, y el formulario.
- * Tablet: la misma escena arriba del formulario. Celular: el asistente pequeño junto al titular.
+ * Celular y tablet: la misma escena, más compacta, arriba del formulario.
  * Pensado para entrar completo en una pantalla de laptop sin hacer scroll.
  */
 export default function LayoutAuth({ children }: LayoutProps<"/">) {
@@ -23,28 +22,18 @@ export default function LayoutAuth({ children }: LayoutProps<"/">) {
         </LuzCursor>
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 py-5 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16 lg:py-10">
-        <aside className="mx-auto hidden w-full md:block md:max-w-xl lg:mx-0 lg:max-w-none">
-          <Logo className="h-9 w-auto" />
-          <p className="anim-titular mt-6 max-w-md font-titulo text-[2rem] font-bold lg:mt-8 lg:text-4xl leading-[1.1] tracking-tight text-white xl:text-[2.75rem]">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-7 px-4 py-6 sm:gap-8 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16 lg:py-10">
+        <aside className="mx-auto w-full max-w-[26rem] sm:max-w-xl lg:mx-0 lg:max-w-none">
+          <Logo className="h-8 w-auto lg:h-9" />
+          <p className="anim-titular mt-4 max-w-md font-titulo text-[1.625rem] font-bold leading-[1.1] tracking-tight text-white sm:mt-6 sm:text-[2rem] lg:mt-8 lg:text-4xl xl:text-[2.75rem]">
             Mientras atiendes, tu agenda se llena sola.
           </p>
-          <div className="mt-6 lg:mt-10">
+          <div className="mt-5 sm:mt-6 lg:mt-10">
             <EscenaAgenda />
           </div>
         </aside>
 
-        <main className="mx-auto w-full max-w-[26rem] md:max-w-xl lg:max-w-[26rem]">
-          {/* Celular: logo + el asistente pequeño junto al titular (tablet usa la escena completa) */}
-          <div className="mb-4 md:hidden">
-            <Logo className="h-8 w-auto" />
-            <div className="mt-4 flex items-center gap-3.5">
-              <MascotaReloj className="size-16" />
-              <p className="anim-titular font-titulo text-[1.375rem] font-bold leading-[1.15] tracking-tight text-white">
-                Mientras atiendes, tu agenda se llena sola.
-              </p>
-            </div>
-          </div>
+        <main className="mx-auto w-full max-w-[26rem] sm:max-w-xl lg:max-w-[26rem]">
           {children}
         </main>
       </div>
