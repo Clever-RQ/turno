@@ -4,7 +4,7 @@
  * "Mientras atiendes, tu agenda se llena sola".
  *
  * Solo CSS (sin JavaScript): la entrada se orquesta con retrasos y,
- * después, la franja gira como radar, el asistente parpadea y las citas flotan.
+ * después, la franja va y viene, el asistente parpadea y las citas flotan.
  * Con "reducir movimiento" todo queda quieto (ver globals.css).
  */
 const MARCAS = Array.from({ length: 60 }, (_, i) => i);
@@ -18,7 +18,7 @@ const CITAS = [
 export function EscenaAgenda() {
   return (
     <div aria-hidden="true" className="flex items-center gap-4 xl:gap-6">
-      <svg viewBox="0 0 400 400" className="anim-escena size-56 shrink-0 overflow-visible xl:size-64">
+      <svg viewBox="0 0 400 400" className="anim-escena size-48 shrink-0 overflow-visible lg:size-56 xl:size-64">
         <defs>
           <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
             <stop offset="0.55" stopColor="#10B981" stopOpacity="0.18" />
@@ -52,10 +52,8 @@ export function EscenaAgenda() {
         <circle cx="200" cy="200" r="100" fill="#FFFFFF" />
         <circle cx="200" cy="200" r="70" fill="#0B1F1A" />
 
-        {/* Franja: gira como radar, con estela */}
-        <g className="anim-radar-escena">
-          <path d="M200 200 L200 138 A62 62 0 0 1 253.7 169 Z" fill="#10B981" opacity="0.14" transform="rotate(-48 200 200)" />
-          <path d="M200 200 L200 138 A62 62 0 0 1 253.7 169 Z" fill="#10B981" opacity="0.32" transform="rotate(-24 200 200)" />
+        {/* Franja: va y viene en la parte de arriba (si diera la vuelta, pasaría bajo los ojos) */}
+        <g className="anim-vaiven">
           <path d="M200 200 L200 138 A62 62 0 0 1 253.7 169 Z" fill="#10B981" />
         </g>
 

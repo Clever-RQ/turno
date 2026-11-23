@@ -111,3 +111,17 @@ body {
   .anim-check, .anim-titular, .anim-tarjeta { animation: none; }
 }
 
+
+/* Mascota pequeña: la franja va y viene en la parte de arriba */
+@keyframes vaiven {
+  0%, 100% { transform: rotate(-30deg); }
+  50% { transform: rotate(40deg); }
+}
+.anim-vaiven {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+  animation: vaiven 3.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-vaiven { animation: none; }
+}
