@@ -31,7 +31,7 @@ export function DialogoLateral({
       ref={dialogo}
       onClose={alCerrar}
       aria-labelledby={idTitulo}
-      className="m-0 mt-auto max-h-[92dvh] w-full max-w-none rounded-t-3xl border border-white/10 bg-tinta p-6 text-white backdrop:bg-black/60 md:my-4 md:ml-auto md:mr-4 md:h-[calc(100dvh-2rem)] md:max-h-none md:w-[28rem] md:rounded-3xl md:p-8"
+      className="anim-fondo m-0 mt-auto max-h-[92dvh] w-full max-w-none rounded-t-3xl border border-white/10 bg-[#0B1F1A]/85 p-6 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_30px_80px_-20px_rgba(0,0,0,0.9)] backdrop-blur-2xl backdrop:bg-black/55 backdrop:backdrop-blur-[3px] md:my-4 md:ml-auto md:mr-4 md:h-[calc(100dvh-2rem)] md:max-h-none md:w-[28rem] md:rounded-3xl md:p-8"
     >
       {abierto && (
         <div className="flex h-full flex-col">

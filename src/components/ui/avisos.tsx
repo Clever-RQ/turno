@@ -50,11 +50,11 @@ export function TarjetaAuth({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-2xl backdrop-blur-xl sm:p-10">
-      {arriba && <div className="mb-8">{arriba}</div>}
-      <h1 className="font-titulo text-3xl font-bold tracking-tight text-white sm:text-4xl">{titulo}</h1>
-      {subtitulo && <p className="mt-3 text-lg text-white/70">{subtitulo}</p>}
-      <div className="mt-8 space-y-6">{children}</div>
+    <section className="anim-tarjeta rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-2xl backdrop-blur-xl max-sm:px-5 sm:p-8">
+      {arriba && <div className="mb-6">{arriba}</div>}
+      <h1 className="font-titulo text-[1.75rem] font-bold leading-tight sm:text-[2rem] tracking-tight text-white">{titulo}</h1>
+      {subtitulo && <p className="mt-2 text-[1.0625rem] text-white/70">{subtitulo}</p>}
+      <div className="mt-5 space-y-4 sm:mt-6 sm:space-y-5">{children}</div>
     </section>
   );
 }

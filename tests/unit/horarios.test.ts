@@ -122,3 +122,16 @@ describe("bloqueoSchema", () => {
     expect(bloqueoSchema.safeParse({ ...base, aplica: "cualquiera" }).success).toBe(false);
   });
 });
+
+describe("fechaLarga, saludo y diaDeSemana", () => {
+  it("formatea la fecha y saluda según la hora de Lima", async () => {
+    const { diaDeSemana, fechaLarga, saludo } = await import("../../src/domain/fechas");
+    // 2026-11-23 01:30 UTC = domingo 22, 20:30 en Lima
+    const instante = new Date("2026-11-23T01:30:00Z");
+    expect(fechaLarga(instante, "America/Lima")).toBe("Domingo 22 de noviembre");
+    expect(saludo(instante, "America/Lima")).toBe("Buenas noches");
+    expect(saludo(new Date("2026-11-22T14:00:00Z"), "America/Lima")).toBe("Buenos días");
+    expect(saludo(new Date("2026-11-22T20:00:00Z"), "America/Lima")).toBe("Buenas tardes");
+    expect(diaDeSemana("2026-11-22")).toBe(0);
+  });
+});

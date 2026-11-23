@@ -90,3 +90,14 @@ describe("personaSchema", () => {
     expect(r.error?.issues[0].message).toBe("Escribe el nombre de la persona.");
   });
 });
+
+describe("formatearDuracion", () => {
+  it("usa horas y minutos", async () => {
+    const { formatearDuracion, resumenServicio } = await import("../../src/domain/servicios");
+    expect(formatearDuracion(30)).toBe("30 min");
+    expect(formatearDuracion(60)).toBe("1 h");
+    expect(formatearDuracion(90)).toBe("1 h 30 min");
+    expect(formatearDuracion(240)).toBe("4 h");
+    expect(resumenServicio({ duracion_min: 90, precio: 60 })).toBe("1 h 30 min · S/ 60");
+  });
+});

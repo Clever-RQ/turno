@@ -60,3 +60,164 @@ body {
   .anim-dialogo, .anim-fondo::backdrop, .anim-aparecer, .anim-salir-tramo,
   .anim-aviso, .anim-pop, .anim-segundero { animation: none; }
 }
+
+/* -------------------------------------------------------------
+   Login: escena del asistente con la agenda llenándose sola.
+   Una sola secuencia de entrada: escena -> citas -> tarjeta.
+------------------------------------------------------------- */
+@keyframes entrar-escena {
+  from { opacity: 0; transform: scale(0.88) rotate(-8deg); }
+}
+@keyframes entrar-cita {
+  from { opacity: 0; transform: translateY(14px) scale(0.92); }
+}
+@keyframes flotar {
+  50% { transform: translateY(-6px); }
+}
+@keyframes parpadeo {
+  0%, 93%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.12); }
+}
+@keyframes entrar-texto {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+.anim-escena {
+  transform-origin: center;
+  animation: entrar-escena 900ms cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+}
+.anim-radar-escena {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+  animation: girar 6s linear infinite;
+}
+.anim-parpadeo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: parpadeo 5.5s ease-in-out 2.4s infinite;
+}
+/* Entra con retraso y después flota; los retrasos van en style (entrada, flote). */
+.anim-cita {
+  animation:
+    entrar-cita 520ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both,
+    flotar var(--flotar, 5s) ease-in-out infinite;
+}
+.anim-check { animation: pop 480ms cubic-bezier(0.3, 1.5, 0.5, 1) both; }
+.anim-titular { animation: entrar-texto 600ms ease-out both; }
+.anim-tarjeta { animation: entrar-aviso 640ms cubic-bezier(0.2, 0.9, 0.3, 1.05) 250ms both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-escena, .anim-radar-escena, .anim-parpadeo, .anim-cita,
+  .anim-check, .anim-titular, .anim-tarjeta { animation: none; }
+}
+
+
+/* Mascota pequeña: la franja va y viene en la parte de arriba */
+@keyframes vaiven {
+  0%, 100% { transform: rotate(-30deg); }
+  50% { transform: rotate(40deg); }
+}
+.anim-vaiven {
+  transform-box: view-box;
+  transform-origin: 200px 200px;
+  animation: vaiven 3.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-vaiven { animation: none; }
+}
+
+/* -------------------------------------------------------------
+   Luz que sigue al mouse (login). La posición la escribe LuzCursor.
+------------------------------------------------------------- */
+.luz-cursor {
+  --luz-x: 50%;
+  --luz-y: 50%;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+.luz-cursor[data-activa] { opacity: 1; }
+.luz-cursor-brillo {
+  background: radial-gradient(460px circle at var(--luz-x) var(--luz-y), rgba(16, 185, 129, 0.18), transparent 65%);
+}
+/* Los relojes del fondo se "encienden" solo cerca del cursor */
+.luz-cursor-revelado {
+  mask-image: radial-gradient(220px circle at var(--luz-x) var(--luz-y), #000, transparent 70%);
+}
+
+/* El formulario vibra cuando el servidor devuelve un error */
+@keyframes vibrar {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-9px); }
+  30% { transform: translateX(8px); }
+  45% { transform: translateX(-6px); }
+  60% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+.anim-vibrar { animation: vibrar 460ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .luz-cursor { display: none; }
+  .anim-vibrar { animation: none; }
+}
+
+/* -------------------------------------------------------------
+   Panel: vidrio y pastilla de navegación
+------------------------------------------------------------- */
+/* Vidrio: degradado translúcido, brillo fino arriba y sombra profunda.
+   Necesita algo detrás (los brillos del fondo) para que el desenfoque se note. */
+.vidrio {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 30px 80px -30px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(24px) saturate(140%);
+}
+.vidrio-suave {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.018));
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* La pastilla: vidrio esmeralda con una barra de luz a la izquierda.
+   Se desliza con rebote; antes de "lista" se coloca sin animar. */
+.pastilla-nav {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.26), rgba(16, 185, 129, 0.09));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 30px -14px rgba(16, 185, 129, 0.7);
+}
+.pastilla-nav::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 22%;
+  bottom: 22%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: #6ee7b7;
+  box-shadow: 0 0 12px #10b981;
+}
+.pastilla-nav[data-proxima="true"] {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+.pastilla-nav[data-proxima="true"]::before { opacity: 0; }
+.pastilla-nav[data-lista] {
+  transition:
+    transform 460ms cubic-bezier(0.34, 1.32, 0.64, 1),
+    height 300ms ease,
+    opacity 200ms ease,
+    background 250ms ease,
+    border-color 250ms ease;
+}
+
+/* Entrada escalonada de las tarjetas del panel */
+.anim-entrar { animation: entrar-aviso 560ms cubic-bezier(0.2, 0.9, 0.3, 1.05) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pastilla-nav[data-lista] { transition: none; }
+  .anim-entrar { animation: none; }
+}

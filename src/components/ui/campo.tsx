@@ -1,7 +1,7 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 
 export const claseInput =
-  "w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3.5 text-white placeholder:text-white/40 outline-none transition focus:border-esmeralda focus:ring-2 focus:ring-esmeralda/30 aria-[invalid=true]:border-red-400/70";
+  "w-full rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-white placeholder:text-white/40 outline-none transition focus:border-esmeralda focus:ring-2 focus:ring-esmeralda/30 aria-[invalid=true]:border-red-400/70";
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   etiqueta: string;
