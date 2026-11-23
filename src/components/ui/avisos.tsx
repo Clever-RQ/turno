@@ -52,8 +52,8 @@ export function TarjetaAuth({
   return (
     <section className="anim-tarjeta rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-2xl backdrop-blur-xl sm:p-8">
       {arriba && <div className="mb-6">{arriba}</div>}
-      <h1 className="font-titulo text-[1.75rem] font-bold leading-tight tracking-tight text-white">{titulo}</h1>
-      {subtitulo && <p className="mt-2 text-white/70">{subtitulo}</p>}
+      <h1 className="font-titulo text-[2rem] font-bold leading-tight tracking-tight text-white">{titulo}</h1>
+      {subtitulo && <p className="mt-2 text-[1.0625rem] text-white/70">{subtitulo}</p>}
       <div className="mt-6 space-y-5">{children}</div>
     </section>
   );

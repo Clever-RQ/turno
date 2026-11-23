@@ -1,4 +1,5 @@
 import { EscenaAgenda } from "@/components/brand/escena-agenda";
+import { FondoRelojes } from "@/components/brand/fondo-relojes";
 import { Logo } from "@/components/ui/logo";
 
 /**
@@ -10,10 +11,11 @@ import { Logo } from "@/components/ui/logo";
 export default function LayoutAuth({ children }: LayoutProps<"/">) {
   return (
     <div className="relative isolate flex min-h-dvh flex-1 overflow-hidden bg-fondo">
-      {/* Fondo: dos brillos verdes, nada más */}
+      {/* Fondo: dos brillos verdes y el motivo de la marca, muy tenue */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -left-48 -top-48 size-[38rem] rounded-full bg-esmeralda/20 blur-[150px]" />
         <div className="absolute -bottom-56 -right-32 size-[32rem] rounded-full bg-esmeralda/10 blur-[150px]" />
+        <FondoRelojes />
       </div>
 
       <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-8 sm:px-8 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16 lg:py-10">

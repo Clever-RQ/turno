@@ -67,7 +67,7 @@ export function EscenaAgenda() {
       </svg>
 
       {/* Las citas que van llegando, como una agenda que se llena */}
-      <ul className="space-y-3">
+      <ul className="space-y-3.5">
         {CITAS.map((cita, i) => (
           <li
             key={cita.hora}
@@ -75,24 +75,24 @@ export function EscenaAgenda() {
             style={{ animationDelay: `${cita.retraso}, calc(${cita.retraso} + 0.6s)`, ["--flotar" as string]: `${5 + i}s` }}
           >
             <div
-              className={`flex w-max items-center gap-3 rounded-2xl border px-3.5 py-2.5 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.9)] backdrop-blur-md ${
+              className={`flex w-max items-center gap-3.5 rounded-2xl border px-4 py-3 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.9)] backdrop-blur-md ${
                 cita.origen === "Asistente" ? "border-esmeralda/60 bg-[#0F2E24]/90" : "border-white/10 bg-[#0B1F1A]/85"
               }`}
             >
               <span
-                className="anim-check grid size-6 shrink-0 place-items-center rounded-full bg-esmeralda text-tinta"
+                className="anim-check grid size-7 shrink-0 place-items-center rounded-full bg-esmeralda text-tinta"
                 style={{ animationDelay: `calc(${cita.retraso} + 0.25s)` }}
               >
-                <svg viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+                <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m5 12.5 4.5 4.5L19 7.5" />
                 </svg>
               </span>
               <div className="leading-tight">
-                <p className="text-sm font-semibold whitespace-nowrap text-white">{cita.hora}</p>
-                <p className="text-xs whitespace-nowrap text-white/65">{cita.servicio}</p>
+                <p className="text-base font-semibold whitespace-nowrap text-white">{cita.hora}</p>
+                <p className="text-sm whitespace-nowrap text-white/65">{cita.servicio}</p>
               </div>
               <span
-                className={`ml-1 rounded-full px-2 py-0.5 text-[11px] font-medium whitespace-nowrap ${
+                className={`ml-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ${
                   cita.origen === "Asistente" ? "bg-esmeralda/20 text-menta" : "bg-white/[0.07] text-white/70"
                 }`}
               >
