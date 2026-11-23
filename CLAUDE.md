@@ -25,11 +25,19 @@ Turno is a **web app** (mobile-first, no native app in the MVP) for small busine
 
 Full plan: `docs/PLAN.md`.
 
+## Code structure (where things go)
+One Next.js app, layered inside `src/` (folder names in English, code in Spanish). Import with `@/` (= `src/`).
+- `src/app/` — routes only: `page.tsx`, `layout.tsx`, `route.ts`. No business logic or big components here.
+- `src/components/` — UI by area: `ui/` (generic), `brand/` (assistant avatar, confirm, toast), `auth/`, `onboarding/`, `panel/`, `services/`, `team/`, `schedules/`.
+- `src/server/` — backend, never shipped to the browser: `actions/` (server actions, `"use server"`), `data/` (Supabase queries), `supabase/` (clients). Data/client modules start with `import "server-only"`: importing them from a client component breaks the build.
+- `src/domain/` — pure logic shared by both sides (Zod schemas, dates, slugs, phones, schedules). No DB, no React. Unit-tested.
+- `tests/unit/` (offline, `npm run test`) and `tests/rls/` (real Supabase, `npm run test:rls`).
+
 ## Current status
 **Sprint 2 — Free slots and public booking (next, 7–13 Dec)**
 
 Tasks (create them as GitHub issues on the "Turno – MVP" board, then add the numbers here):
-- [ ] `calcularHorariosLibres(servicio, fecha)` in `lib/disponibilidad.ts`, pure function, no DB. **Clever writes it** (TDD: Claude writes the tests first, then guides without giving the solution)
+- [ ] `calcularHorariosLibres(servicio, fecha)` in `src/domain/disponibilidad.ts`, pure function, no DB. **Clever writes it** (TDD: Claude writes the tests first, then guides without giving the solution)
 - [ ] Vitest for it: business hours, split shifts, per-person schedules (`personal.horario_propio`), days off, existing bookings, service duration, Lima time, past hours
 - [ ] Public page `/[slug]` with services and a calendar (read with a client WITHOUT session: public policies are `anon` only)
 - [ ] `POST /api/reservas` with Zod and rate limiting. **Clever writes it**, Claude guides and reviews
@@ -39,13 +47,13 @@ Done when: two simultaneous bookings for the same slot leave only one saved (the
 
 Notes for Sprint 2:
 - Data the function needs already exists: `horarios` (null `personal_id` = business; per-person rows only when `horario_propio`), `bloqueos` (UTC instants), `reservas` (active = `pendiente`/`confirmada`), `negocios.zona_horaria`.
-- Helpers to reuse: `lib/fechas.ts` (Lima ↔ UTC), `lib/horarios.ts` (`aMinutos`, `filasASemana`).
-- `/[slug]` must not collide with app routes: reserved slugs live in `lib/slug.ts` and in the DB check.
+- Helpers to reuse: `src/domain/fechas.ts` (Lima ↔ UTC), `src/domain/horarios.ts` (`aMinutos`, `filasASemana`).
+- `/[slug]` must not collide with app routes: reserved slugs live in `src/domain/slug.ts` and in the DB check.
 
 **Sprint 1 — Data and owner access: done (23 Nov 2026, issues #1–#8, PRs #9–#17)**
 - Tables, RLS + grants, composite FKs, one business per owner, reserved slugs, `slug_disponible()`, `guardar_horario()`.
 - Email/password + Google login, onboarding (business + services), panel: Servicios, Equipo, Horarios (weekly + days off).
-- Branded UI pieces: `components/panel/confirmar.tsx` (replaces `window.confirm`), `aviso-asistente.tsx`, `avatar-asistente.tsx` (atento / pensando / confirmó), shared side panel `dialogo-lateral.tsx`, animated switch.
+- Branded UI pieces in `src/components/brand/`: `confirmar.tsx` (replaces `window.confirm`), `aviso-asistente.tsx`, `avatar-asistente.tsx` (atento / pensando / confirmó). Shared side panel `src/components/panel/dialogo-lateral.tsx`, animated switch `src/components/ui/interruptor.tsx`.
 - Tests: 83 unit (`npm run test`) + 20 RLS isolation against the real project (`npm run test:rls`, also in CI with repo secrets).
 
 **Sprint 0 — Setup: done (22 Nov 2026)**
@@ -60,7 +68,7 @@ Known issues solved:
 - `ERESOLVE` installing vitest: `@types/node@20` conflicted with vitest's peer range; fixed by installing `@types/node` matching Node 22/24.
 - CI `Cannot find name 'LayoutProps'`: Next.js generates route types in `.next/`, which doesn't exist on a fresh checkout; fixed with `"typecheck": "next typegen && tsc --noEmit"`.
 - `next build` fails with "uncached or runtime data during prerendering": the project has `cacheComponents: true`, so anything that reads the request (`cookies()`, `searchParams`, Supabase session) must be inside `<Suspense>`. Only `next build` catches this, not lint/typecheck/test.
-- Next.js 16: `middleware.ts` is now `proxy.ts`.
+- Next.js 16: `middleware.ts` is now `proxy.ts` (here `src/proxy.ts`).
 - Dev overlay "unstable value Date.now() while prerendering" on pages that read the session: `partialPrefetching` prefetches with cookies, and `getClaims()` compares the token expiry with `Date.now()`. Fix: `await connection()` before reading the session.
 - Auth emails: Supabase only allows editing templates with custom SMTP (Gmail account + app password). Templates live in `supabase/templates/` and use `{{ .RedirectTo }}?token_hash=...` so links work on any device.
 
