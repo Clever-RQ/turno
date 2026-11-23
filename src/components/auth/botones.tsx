@@ -10,7 +10,7 @@ export function BotonEnviar({ texto, enviando }: { texto: string; enviando: stri
     <button
       type="submit"
       disabled={pending}
-      className="w-full rounded-xl bg-esmeralda py-3.5 text-lg font-medium text-tinta shadow-[0_10px_40px_-8px_rgba(16,185,129,0.6)] transition hover:bg-emerald-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-enlace disabled:cursor-wait disabled:opacity-70"
+      className="w-full rounded-xl bg-esmeralda py-3 font-medium text-tinta shadow-[0_10px_40px_-8px_rgba(16,185,129,0.6)] transition hover:bg-emerald-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-enlace disabled:cursor-wait disabled:opacity-70"
     >
       {pending ? enviando : texto}
     </button>
@@ -25,7 +25,7 @@ export function BotonGoogle({ texto }: { texto: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="flex w-full items-center justify-center gap-3 rounded-xl bg-white py-3.5 text-lg font-medium text-tinta transition hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-enlace disabled:cursor-wait disabled:opacity-70"
+      className="flex w-full items-center justify-center gap-3 rounded-xl bg-white py-3 font-medium text-tinta transition hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-enlace disabled:cursor-wait disabled:opacity-70"
     >
       <LogoGoogle />
       {pending ? "Abriendo Google…" : texto}
