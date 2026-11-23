@@ -151,3 +151,57 @@ export const personaSchema = z.object({
     .optional()
     .transform((valor) => valor === "on"),
 });
+
+// -------------------------------------------------------------
+// Días libres / bloqueos (#7)
+// -------------------------------------------------------------
+
+const FECHA = /^\d{4}-\d{2}-\d{2}$/;
+const HORA = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+/**
+ * El formulario de "Nuevo día libre". Las fechas y horas están en la zona
+ * del negocio; el servidor las convierte a instantes UTC al guardar.
+ * Si no es "todo el día", las horas aplican a un solo día (Desde).
+ */
+export const bloqueoSchema = z
+  .object({
+    desde: z.string().regex(FECHA, { error: "Elige la fecha." }),
+    hasta: z
+      .string()
+      .optional()
+      .transform((v) => (v ? v : undefined))
+      .pipe(z.string().regex(FECHA).optional()),
+    todo_el_dia: z
+      .literal("on")
+      .optional()
+      .transform((v) => v === "on"),
+    hora_desde: z.string().optional(),
+    hora_hasta: z.string().optional(),
+    // "negocio" o el id de una persona.
+    aplica: z.union([z.literal("negocio"), z.uuid()], { error: "Elige a quién aplica." }),
+    motivo: z
+      .string()
+      .trim()
+      .max(80, { error: "Usa como máximo 80 caracteres." })
+      .optional()
+      .transform((v) => v || null),
+  })
+  .superRefine((d, ctx) => {
+    if (d.hasta && d.hasta < d.desde) {
+      ctx.addIssue({ code: "custom", path: ["hasta"], message: "Debe ser igual o posterior a «Desde»." });
+    }
+    if (!d.todo_el_dia) {
+      if (!d.hora_desde || !HORA.test(d.hora_desde) || !d.hora_hasta || !HORA.test(d.hora_hasta)) {
+        ctx.addIssue({ code: "custom", path: ["hora_hasta"], message: "Elige las horas." });
+      } else if (d.hora_hasta <= d.hora_desde) {
+        ctx.addIssue({ code: "custom", path: ["hora_hasta"], message: "La hora final debe ser después de la inicial." });
+      }
+    }
+  });
+
+/** Una semana que llega del navegador: 7 días, hasta 6 turnos por día, horas "HH:MM". */
+export const semanaSchema = z.record(
+  z.enum(["0", "1", "2", "3", "4", "5", "6"]),
+  z.array(z.object({ abre: z.string().regex(HORA), cierra: z.string().regex(HORA) })).max(6),
+);

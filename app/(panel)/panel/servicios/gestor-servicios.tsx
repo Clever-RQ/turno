@@ -5,6 +5,7 @@ import { AvisoError } from "@/components/auth/avisos";
 import { IconoLapiz } from "@/components/iconos";
 import { AvatarAtento } from "@/components/panel/avatar-atento";
 import { AccionesDialogo, DialogoLateral } from "@/components/panel/dialogo-lateral";
+import { useConfirmar } from "@/components/panel/confirmar";
 import { FormularioServicio, Interruptor } from "@/components/servicios/formulario-servicio";
 import { cambiarActivoServicio, eliminarServicio } from "@/lib/acciones/servicios";
 import { formatearPrecio, resumenServicio, type Servicio } from "@/lib/servicios";
@@ -16,6 +17,7 @@ export function GestorServicios({ servicios }: { servicios: Servicio[] }) {
   const [edicion, setEdicion] = useState<Edicion>(null);
   const [error, setError] = useState<string | null>(null);
   const [, iniciar] = useTransition();
+  const [confirmar, dialogoConfirmar] = useConfirmar();
 
   // El interruptor cambia al instante; si el servidor falla, refresh() lo devuelve a su valor real.
   const [visibles, cambiarVisible] = useOptimistic(
@@ -33,6 +35,7 @@ export function GestorServicios({ servicios }: { servicios: Servicio[] }) {
 
   return (
     <div className="space-y-6">
+      {dialogoConfirmar}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-titulo text-4xl font-bold tracking-tight text-white sm:text-5xl">Servicios</h1>
@@ -117,8 +120,14 @@ export function GestorServicios({ servicios }: { servicios: Servicio[] }) {
       <DialogoServicio
         edicion={edicion}
         alCerrar={() => setEdicion(null)}
-        alEliminar={(s) => {
-          if (!window.confirm(`¿Eliminar "${s.nombre}"? Esta acción no se puede deshacer.`)) return;
+        alEliminar={async (s) => {
+          const si = await confirmar({
+            titulo: `¿Eliminar «${s.nombre}»?`,
+            texto: "Esta acción no se puede deshacer. Si solo quieres ocultarlo, desactívalo.",
+            confirmar: "Eliminar",
+            peligro: true,
+          });
+          if (!si) return;
           iniciar(async () => {
             const mensaje = await eliminarServicio(s.id);
             setError(mensaje);

@@ -34,7 +34,7 @@ Tasks are GitHub issues on the "Turno – MVP" project board:
 - [x] #3 Login with email and Google (Supabase Auth)
 - [x] #4 Onboarding: business name and slug
 - [x] #5 CRUD for services
-- [ ] #6 CRUD for staff
+- [x] #6 CRUD for staff
 - [ ] #7 CRUD for schedules and days off
 - [ ] #8 RLS tests: an owner can't read another owner's data
 

@@ -6,6 +6,7 @@ import { claseInput } from "@/components/auth/campo";
 import { IconoLapiz } from "@/components/iconos";
 import { AvatarAtento } from "@/components/panel/avatar-atento";
 import { AccionesDialogo, DialogoLateral } from "@/components/panel/dialogo-lateral";
+import { useConfirmar } from "@/components/panel/confirmar";
 import { Interruptor } from "@/components/servicios/formulario-servicio";
 import {
   cambiarActivoPersona,
@@ -22,6 +23,7 @@ export function GestorEquipo({ personal }: { personal: Persona[] }) {
   const [edicion, setEdicion] = useState<Edicion>(null);
   const [error, setError] = useState<string | null>(null);
   const [, iniciar] = useTransition();
+  const [confirmar, dialogoConfirmar] = useConfirmar();
 
   // El interruptor cambia al instante; refresh() trae el valor real del servidor.
   const [visibles, cambiarVisible] = useOptimistic(
@@ -39,8 +41,14 @@ export function GestorEquipo({ personal }: { personal: Persona[] }) {
     });
   }
 
-  function eliminar(persona: Persona) {
-    if (!window.confirm(`¿Eliminar a ${persona.nombre}? Esta acción no se puede deshacer.`)) return;
+  async function eliminar(persona: Persona) {
+    const si = await confirmar({
+      titulo: `¿Eliminar a ${persona.nombre}?`,
+      texto: "Esta acción no se puede deshacer. Si solo no va a atender un tiempo, mejor desactívala.",
+      confirmar: "Eliminar",
+      peligro: true,
+    });
+    if (!si) return;
     iniciar(async () => {
       setError(await eliminarPersona(persona.id));
       setEdicion(null);
@@ -51,6 +59,7 @@ export function GestorEquipo({ personal }: { personal: Persona[] }) {
 
   return (
     <div className="space-y-6">
+      {dialogoConfirmar}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-titulo text-4xl font-bold tracking-tight text-white sm:text-5xl">Equipo</h1>

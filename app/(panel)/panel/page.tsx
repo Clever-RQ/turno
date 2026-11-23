@@ -24,7 +24,7 @@ export default function PaginaPanel({ searchParams }: PageProps<"/panel">) {
       </Suspense>
       <section className="max-w-2xl rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
         <p className="text-lg text-white/80">
-          Tu negocio está creado. Pronto podrás configurar tus horarios y ver tu agenda desde aquí.
+          Tu negocio está creado. Tu agenda con las citas llega pronto.
         </p>
       </section>
     </div>
@@ -35,9 +35,10 @@ export default function PaginaPanel({ searchParams }: PageProps<"/panel">) {
 async function AvisosConfiguracion() {
   await connection();
   const supabase = await crearClienteServidor();
-  const [servicios, personal] = await Promise.all([
+  const [servicios, personal, horario] = await Promise.all([
     supabase.from("servicios").select("id", { count: "exact", head: true }).eq("activo", true),
     supabase.from("personal").select("id", { count: "exact", head: true }).eq("activo", true),
+    supabase.from("horarios").select("id", { count: "exact", head: true }).is("personal_id", null),
   ]);
 
   return (
@@ -48,6 +49,14 @@ async function AvisosConfiguracion() {
           texto="Tus clientes necesitan elegir un servicio activo para reservar contigo."
           href="/panel/servicios"
           boton="Agregar servicios"
+        />
+      )}
+      {!horario.count && (
+        <Aviso
+          titulo="Configura tu horario para recibir reservas"
+          texto="Sin horario de atención, tus clientes no ven horas disponibles."
+          href="/panel/horarios"
+          boton="Configurar horario"
         />
       )}
       {!personal.count && (
