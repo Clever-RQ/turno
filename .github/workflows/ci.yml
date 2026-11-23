@@ -9,6 +9,11 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    # Secrets del repo (Settings > Secrets and variables > Actions), usados por las pruebas de RLS.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v5
 
@@ -24,3 +29,10 @@ jobs:
       # Compila igual que Vercel: detecta errores que lint/typecheck/test no ven
       # (por ejemplo, datos de la petición fuera de <Suspense> con cacheComponents).
       - run: npm run build
+
+      # Aislamiento entre dueños (RLS) contra el proyecto real de Supabase.
+      # Crea dos dueños temporales y los borra al final.
+      # Los pull requests desde forks no reciben secrets: ahí este paso se salta.
+      - name: Pruebas de RLS
+        if: ${{ env.SUPABASE_SECRET_KEY != '' }}
+        run: npm run test:rls
