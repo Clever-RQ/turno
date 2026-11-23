@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { AvisoError } from "@/components/auth/avisos";
+import { useConfirmar } from "@/components/panel/confirmar";
 import { IconoEnlace, IconoLapiz, IconoPapelera } from "@/components/iconos";
 import { FormularioServicio } from "@/components/servicios/formulario-servicio";
 import { eliminarServicio } from "@/lib/acciones/servicios";
@@ -19,14 +20,21 @@ export function PasoServicios({ negocio, servicios, dominio }: Props) {
   const [versionFormulario, setVersionFormulario] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [eliminando, iniciarEliminacion] = useTransition();
+  const [confirmar, dialogoConfirmar] = useConfirmar();
 
   function terminarEdicion() {
     setEditando(null);
     setVersionFormulario((v) => v + 1);
   }
 
-  function eliminar(servicio: Servicio) {
-    if (!window.confirm(`¿Eliminar "${servicio.nombre}"?`)) return;
+  async function eliminar(servicio: Servicio) {
+    const si = await confirmar({
+      titulo: `¿Eliminar «${servicio.nombre}»?`,
+      texto: "Tus clientes ya no podrán reservarlo.",
+      confirmar: "Eliminar",
+      peligro: true,
+    });
+    if (!si) return;
     iniciarEliminacion(async () => {
       setError(await eliminarServicio(servicio.id));
       if (editando?.id === servicio.id) terminarEdicion();
@@ -35,6 +43,7 @@ export function PasoServicios({ negocio, servicios, dominio }: Props) {
 
   return (
     <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-20">
+      {dialogoConfirmar}
       {/* Vista previa (solo computadora): ya con sus servicios reales */}
       <section aria-label="Vista previa" className="hidden space-y-6 lg:block lg:pt-24">
         <p className="text-lg text-enlace">Así te verán tus clientes</p>

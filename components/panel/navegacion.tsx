@@ -11,7 +11,7 @@ const SECCIONES: { nombre: string; href?: string }[] = [
   { nombre: "Agenda", href: "/panel" },
   { nombre: "Servicios", href: "/panel/servicios" },
   { nombre: "Equipo", href: "/panel/equipo" },
-  { nombre: "Horarios" },
+  { nombre: "Horarios", href: "/panel/horarios" },
   { nombre: "Clientes" },
   { nombre: "Asistente IA" },
   { nombre: "Métricas" },
