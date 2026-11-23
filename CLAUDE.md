@@ -35,8 +35,8 @@ Tasks are GitHub issues on the "Turno – MVP" project board:
 - [x] #4 Onboarding: business name and slug
 - [x] #5 CRUD for services
 - [x] #6 CRUD for staff
-- [ ] #7 CRUD for schedules and days off
-- [ ] #8 RLS tests: an owner can't read another owner's data
+- [x] #7 CRUD for schedules and days off
+- [x] #8 RLS tests: an owner can't read another owner's data (`npm run test:rls`)
 
 Done when: two test accounts can't see each other's data.
 
